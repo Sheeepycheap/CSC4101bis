@@ -3,11 +3,13 @@
 namespace App\DataFixtures;
 
 use App\Entity\CollectionDeVoiture;
+use App\Entity\Galerie;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Voiture; 
 use App\Entity\Membre; 
-use App\Entity\Moteur; 
+use App\Entity\Moteur;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class AppFixtures extends Fixture
 {
@@ -173,11 +175,14 @@ class AppFixtures extends Fixture
             $manager->persist($membre);
         }
         $manager->persist($collectionAndrew);
-        
-        
+        // pour une galerie :
+        $galerie = new Galerie();
+        $galerie->setDescription("je ne sais pas à quoi sert cette entité");
+        $galerie->setPublished(False);
+        $galerie->setCreator($membre);
+        $galerie->addVoiture($voiture);
+        $manager->persist($galerie);
         $manager->flush();
-
-        //
 
         
     }
