@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block title %}Welcome!{% endblock %}
+{% block body  %}
+    <h1>En savoir plus sur une collection</h1>
+
+        {% dump CollectionDeVoiture %}
+
+      <table class="table">
+          <tbody>
+              <tr>
+                  <th>collection n°</th>
+                  <td>{{ CollectionDeVoiture.id }}</td>
+              </tr>
+              <tr>
+                  <th>Description</th>
+                  <td>{{ CollectionDeVoiture.description }}</td>
+              </tr>
+              <tr>
+                  <th>Nombre de voiture dans la collection</th>
+                  <td>{{ CollectionDeVoiture.Voitures|length }}</td>
+              </tr>
+              <tr>
+                  <th>Détenteur de la collection</th>
+                  <td>{{ CollectionDeVoiture.membre.__toString }}</td>
+              </tr>
+          </tbody>
+      </table>
+
+      <a href="{{ path('CollectionDeVoiture_index') }}">back to list</a>
+
+{% endblock %}

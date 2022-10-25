@@ -1,0 +1,10 @@
+bootstrap_menu:
+  menus:
+    main:
+      items:
+        inventaire:
+          label: 'Liste des Collection de voitures'
+          route: 'CollectionDeVoiture_list' 
+        voiture:
+          label: 'Liste des voitures'
+          route: 'Voiture_list'   

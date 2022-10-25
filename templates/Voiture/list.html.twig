@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome!{% endblock %}
+
+{% block body %}
+<h1>Voici toutes les Voitures</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Description</th>
+            <th>marque</th>
+            <th>modele</th>
+            <th>couleur</th>
+            <th>Appartient à la Voiturelection n°</th>
+            <th>En savoir plus</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for Voiture in Voiture%}
+        <tr>
+            <td>{{ Voiture.id }}</td>
+            <td>{{Voiture.description}}</td>
+            <td>{{Voiture.marque}}</td>
+            <td>{{Voiture.modele}}</td>
+            <td>{{Voiture.couleur}}</td>
+            <td>{{Voiture.collectionDeVoiture.id}}</td>
+            <td><a href="{{ path('Voiture_show', {'id': Voiture.id}) }}">show</a></td>
+        </tr>
+    {%endfor%} {# todos #}
+
+    </tbody>
+</table>
+{% endblock %}

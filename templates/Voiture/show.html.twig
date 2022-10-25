@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+{% block title %}Welcome!{% endblock %}
+{% block body  %}
+    <h1>En savoir plus sur une voiture</h1>
+
+        {% dump Voiture %}
+
+      <table class="table">
+          <tbody>
+              <tr>
+                  <th>voiture n°</th>
+                  <td>{{ Voiture.id }}</td>
+              </tr>
+              <tr>
+                  <th>Description</th>
+                  <td>{{ Voiture.description }}</td>
+              </tr>
+              <tr>
+                  <th>Marque</th>
+                  <td>{{ Voiture.marque }}</td>
+              </tr>
+              <tr>
+                  <th>Modele</th>
+                  <td>{{ Voiture.modele }}</td>
+              </tr>
+              <tr>
+                  <th>couleur</th>
+                  <td>{{ Voiture.couleur }}</td>
+              </tr>
+              <tr>
+                  <th>Est dans la collection n°</th>
+                  <td>{{ Voiture.collectionDeVoiture.id }}</td>
+              </tr>
+              
+              <tr>
+                    <th>Type de moteur</th>
+                    <td>{{ Voiture.Moteur[0].__toString}}</td>
+              </tr>
+              
+          </tbody>
+      </table>
+
+      <a href="{{ path('Voiture_index') }}">back to list</a>
+
+{% endblock %}
