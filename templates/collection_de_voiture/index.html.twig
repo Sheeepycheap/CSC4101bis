@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CollectionDeVoiture index{% endblock %}
+
+{% block main %}
+    <h1>CollectionDeVoiture index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th>Nb Voitures</th>
+                <th>Membre</th>
+                <th> More details</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for col in CollectionDeVoiture%}
+            <tr>
+                <td>{{ col.id }}</td>
+                <td>{{col.description}}</td>
+                <td>{{col.Voitures|length}}</td>
+                <td>{{col.membre.__toString}}</td>
+                <td>
+                    <a href="{{ path('app_collection_de_voiture_show', {'id': col.id}) }}">show</a>
+                    <a href="{{ path('app_collection_de_voiture_edit', {'id': col.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_collection_de_voiture_new') }}">Create new</a>
+{% endblock %} {# main #}

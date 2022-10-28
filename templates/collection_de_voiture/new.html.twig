@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New CollectionDeVoiture{% endblock %}
+
+{% block main %}
+    <h1>Create new CollectionDeVoiture</h1>
+
+    {{ include('collection_de_voiture/_form.html.twig') }}
+
+    <a href="{{ path('CollectionDeVoiture_index') }}">back to list</a>
+{% endblock %} {# main #}
