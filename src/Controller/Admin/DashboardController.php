@@ -13,6 +13,8 @@ use App\Entity\CollectionDeVoiture;
 use App\Entity\Voiture;
 use App\Entity\Membre;
 use App\Entity\Galerie;  
+use App\Entity\Moteur;  
+use App\Entity\User;  
 
 
 class DashboardController extends AbstractDashboardController
@@ -48,7 +50,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('CollectionDeVoiture', 'fas fa-door-closed', CollectionDeVoiture::class);
         yield MenuItem::linkToCrud('Voitures', 'fas fa-car', Voiture::class);
         yield MenuItem::linkToCrud('Membre', 'fas fa-user', Membre::class);
-        yield MenuItem::linkToCrud('Galerie', 'fas fa-art', Galerie::class);
+        yield MenuItem::linkToCrud('Galerie', 'fas fa-folder-open', Galerie::class);
+        yield MenuItem::linkToCrud('Moteur vroom vrooom', 'fab fa-accessible-icon', Moteur::class);
+        yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
 
     }
 }

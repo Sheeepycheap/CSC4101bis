@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Voiture{% endblock %}
+
+{% block main %}
+    <h1>Voiture</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ voiture.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ voiture.description }}</td>
+            </tr>
+            <tr>
+                <th>Marque</th>
+                <td>{{ voiture.marque }}</td>
+            </tr>
+            <tr>
+                <th>Modele</th>
+                <td>{{ voiture.modele }}</td>
+            </tr>
+            <tr>
+                <th>Couleur</th>
+                <td>{{ voiture.couleur }}</td>
+            </tr>
+            <tr>
+                <th>Le type de moteur </th>
+                <td> 
+                  <ul>
+                    {% for moteur in voiture.Moteur %}
+                        <li>{{moteur.__toString}}</li>
+                    {% endfor %}
+                  </ul>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('app_voiture_edit', {'id': voiture.id}) }}">edit</a>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('voiture/_delete_form.html.twig') }}
+    {% endif %}
+    <a href="{{ path('app_galerie_show', {'id': galerie.id}) }}">back to galerie</a>
+{% endblock %} {#main#}

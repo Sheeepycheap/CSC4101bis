@@ -3,8 +3,21 @@
 {% block title %}Welcome!{% endblock %}
 
 {% block body %}
-<h1>Welcome </h1>
+<h1>Bien le bonjour à toi cher visiteur.  </h1>
 
-    <p>{{ welcome }}</p>
+    <p>Voir</p>
+    <ul>
+        <li> <a href="{{ path('app_galerie_index') }}">Voir les galleries de nos membres</a> </li>
+        {% if membreId is not null  and is_granted('ROLE_USER') %}
+            <li> <a href="{{ path('app_membre_show', {'id': membreId} ) }}"> Voir son espace. </a> </li>
+        {% elseif membreId is null and is_granted('ROLE_ADMIN') %}
+            <li> Vous êtes admin. Grand respect à vous.</li>
+        {% else %}
+            <li> <a href="{{ path('app_login') }}">S'identifier</a></li>
+        {% endif %}
+        
+        
+        
+    </ul>
 
 {% endblock %} {# body #}

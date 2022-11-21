@@ -36,7 +36,6 @@ class VoitureCrudController extends AbstractCrudController
             TextField::new('modele'),
             TextField::new('couleur'),
             AssociationField::new('Moteur') // remplacer par le nom de l'attribut spécifique, par exemple 'bodyShape'
-            ->onlyOnDetail()
             ->formatValue(function ($value, $entity) {
                 return implode(', ', $entity->getMoteur()->toArray()); // ici getBodyShapes()
             })

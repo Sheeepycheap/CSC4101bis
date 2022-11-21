@@ -3,7 +3,7 @@
 {% block title %}CollectionDeVoiture index{% endblock %}
 
 {% block main %}
-    <h1>CollectionDeVoiture index</h1>
+    <h1>Mes Collections De Voitures (inventaires) </h1>
 
     <table class="table">
         <thead>
@@ -24,7 +24,9 @@
                 <td>{{col.membre.__toString}}</td>
                 <td>
                     <a href="{{ path('app_collection_de_voiture_show', {'id': col.id}) }}">show</a>
+                    {% if is_granted('ROLE_USER') %}
                     <a href="{{ path('app_collection_de_voiture_edit', {'id': col.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -35,5 +37,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_collection_de_voiture_new') }}">Create new</a>
+    {#<a href="{{ path('app_collection_de_voiture_new') }}">Create new</a>#}
 {% endblock %} {# main #}

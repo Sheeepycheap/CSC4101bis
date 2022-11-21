@@ -2,13 +2,14 @@
 
 {% block title %}Galerie index{% endblock %}
 
-{% block body %}
-    <h1>Galerie index</h1>
+{% block main%}
+    <h1>Galerie index </h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
+                <th> Créateur </th>
                 <th>Description</th>
                 <th>Published</th>
                 <th>actions</th>
@@ -18,11 +19,22 @@
         {% for galerie in galeries %}
             <tr>
                 <td>{{ galerie.id }}</td>
+                <td> {{galerie.creator}}</td>
                 <td>{{ galerie.description }}</td>
                 <td>{{ galerie.published ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('app_galerie_show', {'id': galerie.id}) }}">show</a>
-                    <a href="{{ path('app_galerie_edit', {'id': galerie.id}) }}">edit</a>
+                    {%if is_granted('ROLE_USER')%}
+                        {%if creator is not null%}
+                            {% if creator.name == galerie.creator %}
+                            <a href="{{ path('app_galerie_edit', {'id': galerie.id}) }}">edit</a>
+                            {% endif %}
+                        {% endif %}
+                    {%endif%}
+                    
+                    {%if is_granted('ROLE_ADMIN')%}
+                        <a href="{{ path('app_galerie_edit', {'id': galerie.id}) }}">edit</a>
+                    {%endif%}
                 </td>
             </tr>
         {% else %}
@@ -32,6 +44,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {%if is_granted('ROLE_USER')%}
     <a href="{{ path('app_galerie_new') }}">Create new</a>
-{% endblock %}
+    {%endif%}
+{% endblock %} {#main#}

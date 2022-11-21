@@ -24,11 +24,26 @@
                   <th>Détenteur de la collection</th>
                   <td>{{ collection_de_voiture.membre.__toString }}</td>
               </tr>
+              <tr>
+                  <th>Les voitures de la collection</th>
+                  <td> 
+                  <ul>
+                    {% for voiture in collection_de_voiture.Voitures %}
+                        <li><a href="{{ path('app_voiture_show', {'id': voiture.id}) }}"> {{voiture.__toString}} </a></li>
+                    {% endfor %}
+                  </ul>
+                  </td>
+              </tr>
           </tbody>
     </table>
 
     <a href="{{ path('CollectionDeVoiture_index') }}">back to list</a>
 
-    <a href="{{ path('app_collection_de_voiture_edit', {'id': collection_de_voiture.id}) }}">edit</a>
+    {% if is_granted('ROLE_USER') %}
+        <a href="{{ path('app_collection_de_voiture_edit', {'id': collection_de_voiture.id}) }}">edit</a>
+    {% endif %}
+    
+    {% if is_granted('ROLE_ADMIN') %}
     {{ include('collection_de_voiture/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %} {# main #}

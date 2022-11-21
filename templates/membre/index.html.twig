@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membre index{% endblock %}
+
+{% block main %}
+    <h1>Membre index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for membre in membres %}
+            <tr>
+                <td>{{ membre.id }}</td>
+                <td>{{ membre.name }}</td>
+                <td>{{ membre.description }}</td>
+                <td>
+                    <a href="{{ path('app_membre_show', {'id': membre.id}) }}">show</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_membre_edit', {'id': membre.id}) }}">edit</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('app_membre_new') }}">Create new</a>
+    {% endif %}
+{% endblock %} {#main#}

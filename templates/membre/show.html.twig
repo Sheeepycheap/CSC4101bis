@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membre{% endblock %}
+
+{% block main %}
+    <h1> Bienvenue {{membre.name}} ! </h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ membre.id }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ membre.description }}</td>
+            </tr>
+            
+            <tr>
+                <th>Mes collections (inventaires) ({{membre.name}})</th>
+                <td>
+                    {% for inventory in membre.collections %}
+                        <li>
+                            <a href="{{ path('app_collection_de_voiture_show', {'id': inventory.getId()})}}">{{ inventory.__toString }}</a>
+                        </li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th> Mes galeries  ({{membre.name}})</th>
+                <td>
+                    {% for inventory in membre.galeries %}
+                        <li>
+                            <a href="{{ path('app_galerie_show', {'id': inventory.getId()})}}">{{ inventory.__toString }}</a>
+                        </li>
+                    {% endfor %}
+                </td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_membre_index') }}">back to list</a>
+
+    <a href="{{ path('app_membre_edit', {'id': membre.id}) }}">edit</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        {{ include('membre/_delete_form.html.twig') }}
+    {% endif %}
+    <a href="{{ path('app_collection_de_voiture_new', {'id': membre.id}) }}">add new inventory</a>
+{% endblock %} {#main#}

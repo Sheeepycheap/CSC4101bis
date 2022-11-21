@@ -3,8 +3,32 @@ bootstrap_menu:
     main:
       items:
         inventaire:
-          label: 'Liste des Collection de voitures'
+          label: 'Inventaires'
           route: 'CollectionDeVoiture_list' 
         voiture:
-          label: 'Liste des voitures'
-          route: 'Voiture_list'   
+          label: 'Les voitures'
+          route: 'Voiture_list'
+        galerie:
+          label: 'Les galeries'
+          route: 'app_galerie_index' 
+        Membre:
+          label: 'Membres'
+          route: 'app_membre_index'
+    anonymousaccount:
+      items: 
+        galeries:
+          label: 'Galeries des membres'
+          route: 'app_galerie_index'
+        login:
+          label: 'Login'
+          route: 'app_login'
+        register: 
+          label: 'Register'
+          route: 'app_register'
+        
+    account:
+      items:
+        logout:
+          label: 'Logout'
+          route: 'app_logout'
+          roles: [ 'ROLE_USER' ]

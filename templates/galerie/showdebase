@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Galerie de {{galerie.creator}}{% endblock %}
+{% block title %}Galerie{% endblock %}
 
 {% block main %}
-    <h1>Galerie de {{galerie.creator}}</h1>
+    <h1>Galerie</h1>
 
     <table class="table">
         <tbody>
@@ -16,13 +16,11 @@
                 <td>{{ galerie.description }}</td>
             </tr>
             <tr>
-                <th>Les voitures de la galerie</th>
+                <th>Les voitures de la galeriecollection</th>
                 <td> 
                   <ul>
                     {% for voiture in galerie.Voiture %}
-                        <li>
-                            <a href="{{ path('app_galerie_Voiture_show', {'galerie_id': galerie.id, 'Voiture_id' : voiture.id}) }}"> {{ voiture }} </a>
-                        </li>
+                        <li><a href="{{ path('app_voiture_show', {'id': voiture.id}) }}"> {{voiture.__toString}} </a></li>
                     {% endfor %}
                   </ul>
                 </td>
@@ -33,5 +31,10 @@
             </tr>
         </tbody>
     </table>
-    <a href="{{ path('app_galerie_index') }}"> revenir vers les galeries</a>
-{% endblock %}{#main#}
+
+    <a href="{{ path('app_galerie_index') }}">back to list</a>
+
+    <a href="{{ path('app_galerie_edit', {'id': galerie.id}) }}">edit</a>
+
+    {{ include('galerie/_delete_form.html.twig') }}
+{% endblock %} {#main#}

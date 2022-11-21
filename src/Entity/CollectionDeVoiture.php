@@ -107,8 +107,7 @@ class CollectionDeVoiture
 
     public function __toString() 
     {
-        $s = 'ID :';
-        $s .= $this->getId() .' - ' . $this->getDescription() .' - '. 'dans la collection de :'. '' . $this->getMembre()->__toString();
+        $s = $this->getDescription() .' - '. 'dans la collection de :'. '' . $this->getMembre()->__toString();
         return $s;
     }
     

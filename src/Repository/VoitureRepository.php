@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Membre;
 use App\Entity\Voiture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +38,20 @@ class VoitureRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return Voiture[] Returns an array of Voiture objects for a member
+     */
+    public function findMemberVoitures(Membre $membre): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.collectionDeVoiture', 'i')
+            ->andWhere('i.membre = :membre')
+            ->setParameter('membre', $membre)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
 //    /**

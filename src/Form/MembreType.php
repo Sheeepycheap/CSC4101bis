@@ -2,27 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\CollectionDeVoiture;
+use App\Entity\Membre;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CollectionDeVoitureType extends AbstractType
+class MembreType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('name')
             ->add('description')
-            ->add('membre', null, [
-                'disabled'   => true,
-            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => CollectionDeVoiture::class,
+            'data_class' => Membre::class,
         ]);
     }
 }

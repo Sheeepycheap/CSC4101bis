@@ -9,6 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 use App\Entity\Voiture; 
 use App\Entity\Membre; 
 use App\Entity\Moteur;
+use App\Entity\User;
 use phpDocumentor\Reflection\PseudoTypes\False_;
 
 class AppFixtures extends Fixture
@@ -42,8 +43,8 @@ class AppFixtures extends Fixture
      */
     private static function MembreDataGenerator()
     {
-        yield ["Andrew Tate","Sigma Male"];
-        
+        yield ["Andrew Tate","Sigma Male","ANDREWTATE@localhost"];
+
     }
 
     /**
@@ -75,6 +76,13 @@ class AppFixtures extends Fixture
         yield ["sous-type de Moteur Hybride","mHEV - mild-hybrids",null];
         yield ["sous-type de Moteur Hybride","HEV - les full-hybrids",null];
         yield ["sous-type de Moteur Hybride","PHEV - hybrides rechargeables",null];
+    }
+
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class,
+        ];
     }
 
     public function load(ObjectManager $manager)
@@ -146,44 +154,67 @@ class AppFixtures extends Fixture
         $voiture->setModele("V3");      
         $voiture->setCouleur("ROUGE"); 
         $voiture->addMoteur($moteurcomb);
-        //$moteurcomb->addVoiture($voiture);
+
+        $batmobile = new Voiture();
+        $batmobile->setDescription("BATMOBILE");
+        $batmobile->setMarque("WAYNE ENTREPRISE");
+        $batmobile->setModele("THE DARK KNIGHT");      
+        $batmobile->setCouleur("NWAAR"); 
+        $batmobile->addMoteur($moteurcomb);
         $manager->persist($moteurcomb);
         $manager->persist($voiture);
+        $manager->persist($batmobile);
         // Savoir comment réutiliser des objets hors de la boucle. 
-        //foreach (self::VoitureDataGenerator() as [$description, $marque,$modele,$couleur] ) {
-         //   $voiture = new Voiture();
-         //    $voiture->setDescription($description);
-         //    $voiture->setMarque($marque);
-         //    $voiture->setModele($modele);      
-         //    $voiture->setCouleur($couleur); 
-         //    $manager->persist($voiture);
-        //}
-        //$manager->flush();
-        // Génération pour les collections
+
         $collectionAndrew = new CollectionDeVoiture();
         $collectionAndrew->setId(1);
-        $collectionAndrew->setDescription("Collection de Andrew Tate");
+        $collectionAndrew->setDescription("Collection des voitures à combustion de Andrew Tate");
         $collectionAndrew->addVoiture($voiture);
-        $repoDeMembe = $manager->getRepository(Membre::class);
 
-        foreach (self::MembreDataGenerator() as [$name, $description] ) {
-            $membre = new Membre();
-            $membre->setName($name);
-            $membre->setDescription($description);
-            $membre->addCollection($collectionAndrew);
-            $collectionAndrew->setMembre($membre);
-            $manager->persist($membre);
-        }
+        $collectionBatman = new CollectionDeVoiture();
+        $collectionBatman->setId(2);
+        $collectionBatman->setDescription("Collection des voitures utilisées par Batman pour tabasser les méchants pas bo");
+        $collectionBatman->addVoiture($batmobile);
+
+        //andrew membre
+        $andrew_membre = new Membre();
+        $andrew_membre->setName('ANDREW TATE');
+        $andrew_membre->setDescription("Sigma Male");
+        $andrew_membre->addCollection($collectionAndrew);
+        $collectionAndrew->setMembre($andrew_membre);
+        $manager->persist($andrew_membre);
         $manager->persist($collectionAndrew);
+        // batman membre
+        $batman_membre = new Membre();
+        $batman_membre->setName("BATMAN");
+        $batman_membre->setDescription("JUSTICIER DE L'OMBRE");
+        $batman_membre->addCollection($collectionBatman);
+        $collectionBatman->setMembre($batman_membre);
+        $manager->persist($batman_membre);
+        $manager->persist($collectionBatman);
         // pour une galerie :
-        $galerie = new Galerie();
-        $galerie->setDescription("je ne sais pas à quoi sert cette entité");
-        $galerie->setPublished(False);
-        $galerie->setCreator($membre);
-        $galerie->addVoiture($voiture);
-        $manager->persist($galerie);
-        $manager->flush();
+        $galerie_andrew = new Galerie();
+        $galerie_andrew->setDescription("Galerie montrant les BUGGATIS de SIEUR TOPG");
+        $galerie_andrew->setPublished(True);
+        $galerie_andrew->setCreator($andrew_membre);
+        $galerie_andrew->addVoiture($voiture);
+        $manager->persist($galerie_andrew);
+
+        $galerie_batman = new Galerie();
+        $galerie_batman->setDescription("Batman expose ses véhicules favoris");
+        $galerie_batman->setPublished(False);
+        $galerie_batman->setCreator($batman_membre);
+        $galerie_batman->addVoiture($batmobile);
+        $manager->persist($galerie_batman);
+
+        // $user = new User();
+        // $user->setEmail("topg@localhost");
+        // $user->setMembre($membre);
+        // $user->setPassword('topg');
+        // $user->setRoles(['ROLE_USER']);
+        // $manager->persist($user);
 
         
+        $manager->flush();
     }
 }

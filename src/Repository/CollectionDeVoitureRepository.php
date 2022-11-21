@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\CollectionDeVoiture;
+use App\Entity\Voiture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -32,11 +33,25 @@ class CollectionDeVoitureRepository extends ServiceEntityRepository
 
     public function remove(CollectionDeVoiture $entity, bool $flush = false): void
     {
+        $VoitureRepository = $this->getEntityManager()->getRepository(Voiture::class);
+
+        // clean the [objets] properly
+        $voitures = $entity->getVoitures();
+        foreach($voitures as $voiture) {
+            $VoitureRepository->remove($voiture, $flush);
+        }
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+
+    //     $this->getEntityManager()->remove($entity);
+
+    //     if ($flush) {
+    //         $this->getEntityManager()->flush();
+    //     }
+    // 
     }
 
 //    /**

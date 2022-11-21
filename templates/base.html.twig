@@ -19,7 +19,19 @@
         {% block menu %}
             <!-- Navigation -->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div class="container">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        {% if is_granted('ROLE_USER') %}
+                            {{ render_bootstrap_menu('main') }}
+                        {% endif %}
+                        {% if app.user %}
+                            {{ render_bootstrap_menu('account') }}
+                        {% else %}
+                            {{ render_bootstrap_menu('anonymousaccount') }}
+                        {% endif %}
+                    </ul>
+                </div>
+                {#<div class="container">
                     <a class="navbar-brand" href="{{ path('home') }}">home</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -27,7 +39,8 @@
                             {{ render_bootstrap_menu('main') }}
                         </ul>
                     </div>
-                </div>
+                </div>#}
+
             </nav>
         {% endblock %}{# menu #}
 

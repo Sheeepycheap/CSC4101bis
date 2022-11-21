@@ -39,6 +39,11 @@ class Membre
      */
     private $galeries;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="Membre", cascade={"persist", "remove"})
+     */
+    private $user;
+
     public function __construct()
     {
         $this->collections = new ArrayCollection();
@@ -151,6 +156,28 @@ class Membre
                 $galery->setCreator(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setMembre(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getMembre() !== $this) {
+            $user->setMembre($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

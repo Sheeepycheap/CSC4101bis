@@ -3,55 +3,113 @@
 namespace App\Controller;
 
 use App\Entity\Voiture;
+use App\Form\Voiture1Type;
+use App\Entity\Membre;
+use App\Repository\VoitureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
- * Controleur Voiture   
- * @Route("/Voitures")
+ * @Route("/voiture")
  */
 class VoitureController extends AbstractController
 {
-
     /**
-     * @Route("/",name = "Voitures", methods="GET")
+     * @Route("/", name="app_voiture_index", methods={"GET"})
+     * @Route("/", name = "Voiture_list", methods="GET")
      */
-    public function indexAction(ManagerRegistry $doctrine)
-    {
-        return $this->render('Voiture/index.html.twig',
-        [ 'welcome' => "Bonne utilisation de la todo list" ]
-        );
+    public function index(VoitureRepository $voitureRepository): Response
+    {      
+
+        $em= $this->getDoctrine()->getManager();
+        //$voitures = $em->getRepository(Voiture::class)->findAll();
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $voitures = $voitureRepository->findAll();
+            return $this->render('voiture/index.html.twig',
+                [ 'voitures' => $voitures ]
+            );
+        }
+        else {
+            $user=$this->getUser();
+            if($user){            
+                $membreRepository = $em->getRepository(Membre::class);
+                $membre = $membreRepository->findOneBy([
+                        'user'=> $user
+                ]);
+                $voitures = $voitureRepository->findMemberVoitures($membre);
+                return $this->render('voiture/index.html.twig',
+                [ 'voitures' => $voitures ]
+            );
+            }
+        }
     }
 
     /**
-     * Lists all todo entities.
-     *
-     * @Route("/list", name = "Voiture_list", methods="GET")
-     * @Route("/index", name="Voiture_index", methods="GET")
+     * @Route("/new", name="app_voiture_new", methods={"GET", "POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
-    public function listAction(ManagerRegistry $doctrine)
+    public function new(Request $request, VoitureRepository $voitureRepository): Response
     {
-        $entityManager= $doctrine->getManager();
-        $Voiture = $entityManager->getRepository(Voiture::class)->findAll();
-        dump($Voiture);
+        $voiture = new Voiture();
+        $form = $this->createForm(Voiture1Type::class, $voiture);
+        $form->handleRequest($request);
 
-    return $this->render('Voiture/list.html.twig',
-        [ 'Voiture' => $Voiture ]
-        );
+        if ($form->isSubmitted() && $form->isValid()) {
+            $voitureRepository->add($voiture, true);
+
+            return $this->redirectToRoute('app_voiture_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('voiture/new.html.twig', [
+            'voiture' => $voiture,
+            'form' => $form,
+        ]);
     }
-    
+
     /**
-     * Finds and displays a todo entity.
-     *
-     * @Route("/{id}", name="Voiture_show", requirements={ "id": "\d+"}, methods="GET")
+     * @Route("/{id}", name="app_voiture_show", methods={"GET"})
      */
-    public function showAction(Voiture $Voiture): Response
+    public function show(Voiture $voiture): Response
     {
-        return $this->render('Voiture/show.html.twig',
-        [ 'Voiture' => $Voiture ]
-        );
+        return $this->render('voiture/show.html.twig', [
+            'voiture' => $voiture,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit", name="app_voiture_edit", methods={"GET", "POST"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function edit(Request $request, Voiture $voiture, VoitureRepository $voitureRepository): Response
+    {
+        $form = $this->createForm(Voiture1Type::class, $voiture);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $voitureRepository->add($voiture, true);
+
+            return $this->redirectToRoute('app_voiture_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('voiture/edit.html.twig', [
+            'voiture' => $voiture,
+            'form' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="app_voiture_delete", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function delete(Request $request, Voiture $voiture, VoitureRepository $voitureRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$voiture->getId(), $request->request->get('_token'))) {
+            $voitureRepository->remove($voiture, true);
+        }
+
+        return $this->redirectToRoute('app_voiture_index', [], Response::HTTP_SEE_OTHER);
     }
 }
